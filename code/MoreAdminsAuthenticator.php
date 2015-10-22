@@ -36,20 +36,15 @@ class MoreAdminsAuthenticator extends MemberAuthenticator {
 
         // Check default login (see Security::setDefaultAdmin()) the standard way and the "extension"-way :-)
         $asDefaultAdmin = $email === Security::default_admin_username();
-        if($asDefaultAdmin || isset($GLOBALS['_DEFAULT_ADMINS'])) {
+        if($asDefaultAdmin || (isset($GLOBALS['_DEFAULT_ADMINS']) && array_key_exists($email, $GLOBALS['_DEFAULT_ADMINS']))) {
             // If logging is as default admin, ensure record is setup correctly
             $member = Member::default_admin();
             $success = Security::check_default_admin($email, $data['Password']);
 
             // If not already true check if one of the extra admins match
-            if(!$success) {
-                foreach($GLOBALS['_DEFAULT_ADMINS'] as $mail=>$pw) {
-                    $success = $mail == $email && $data['Password'] == $pw;
+            if(!$success)
+                $success = $GLOBALS['_DEFAULT_ADMINS'][$email] == $data['Password'];
 
-                    // Break loop if there was a match
-                    if($success) break;
-                }
-            }
             if($success) return $member;
         }
 

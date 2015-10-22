@@ -21,3 +21,9 @@ Do a *dev/build?flush=all* and you are done!
 
 ## Notes
 If your are using this module you do not need to specify a default admin the default way via `Security::setDefaultAdmin()` or the constants `SS_DEFAULT_ADMIN_USERNAME` and `SS_DEFAULT_ADMIN_PASSWORD` since the module will use the first entry in the `$_DEFAULT_ADMINS` array if there is no default admin, yet.
+
+If you want to use it with basic auth you can specify the realm message in the prompt via the config API:
+```yml
+MoreAdminsBasicAuth:
+  default_realm: 'This site is protected. You need to enter admin credentials.'
+```

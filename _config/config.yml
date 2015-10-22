@@ -4,7 +4,14 @@ After:
   - 'framework/*'
   - 'cms/*'
 ---
+Controller:
+  extensions:
+    - MoreAdminsController
 Injector:
   MemberLoginForm:
     properties:
       authenticator_class: MoreAdminsAuthenticator
+  RequestProcessor:
+    properties:
+      filters:
+        - %$MoreAdminsRequestFilter
