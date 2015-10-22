@@ -1,0 +1,18 @@
+{
+  "name": "level51/more-admins",
+  "version": "0.1.0",
+  "description": "A small SilverStripe module for adding multiple default admins through environment config. Comes handy for dev teams!",
+  "type": "silverstripe-module",
+  "authors": [
+    {
+      "name": "Julian Scheuchenzuber",
+      "email": "js@lvl51.de"
+    }
+  ],
+  "require": {
+    "php": ">=5.3"
+  },
+  "extra": {
+    "installer-name": "more-admins"
+  }
+}

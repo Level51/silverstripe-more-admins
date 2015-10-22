@@ -1,0 +1,10 @@
+---
+Name: more-admins
+After:
+  - 'framework/*'
+  - 'cms/*'
+---
+Injector:
+  MemberLoginForm:
+    properties:
+      authenticator_class: MoreAdminsAuthenticator
