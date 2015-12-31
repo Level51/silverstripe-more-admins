@@ -6,7 +6,8 @@
  * Date: 22.10.15
  * Time: 13:28
  */
-class MoreAdminsBasicAuth extends BasicAuth {
+class MoreAdminsBasicAuth extends BasicAuth
+{
     private static $default_realm = 'Test space';
 
     /**
@@ -22,9 +23,12 @@ class MoreAdminsBasicAuth extends BasicAuth {
      *  session log-in if those credentials are disabled.
      * @return Member $member
      */
-    public static function requireLogin($realm, $permissionCode = null, $tryUsingSessionLogin = true) {
+    public static function requireLogin($realm, $permissionCode = null, $tryUsingSessionLogin = true)
+    {
         $isRunningTests = (class_exists('SapphireTest', false) && SapphireTest::is_running_test());
-        if(!Security::database_is_ready() || (Director::is_cli() && !$isRunningTests)) return true;
+        if (!Security::database_is_ready() || (Director::is_cli() && !$isRunningTests)) {
+            return true;
+        }
 
         /*
          * Enable HTTP Basic authentication workaround for PHP running in CGI mode with Apache
@@ -45,21 +49,23 @@ class MoreAdminsBasicAuth extends BasicAuth {
         }
 
         $member = null;
-        if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+        if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
             $member = MoreAdminsAuthenticator::authenticate(array(
                 'Email' => $_SERVER['PHP_AUTH_USER'],
                 'Password' => $_SERVER['PHP_AUTH_PW'],
             ), null);
         }
 
-        if(!$member && $tryUsingSessionLogin) $member = Member::currentUser();
+        if (!$member && $tryUsingSessionLogin) {
+            $member = Member::currentUser();
+        }
 
         // If we've failed the authentication mechanism, then show the login form
-        if(!$member) {
+        if (!$member) {
             $response = new SS_HTTPResponse(null, 401);
             $response->addHeader('WWW-Authenticate', "Basic realm=\"$realm\"");
 
-            if(isset($_SERVER['PHP_AUTH_USER'])) {
+            if (isset($_SERVER['PHP_AUTH_USER'])) {
                 $response->setBody(_t('BasicAuth.ERRORNOTREC', "That username / password isn't recognised"));
             } else {
                 $response->setBody(_t('BasicAuth.ENTERINFO', "Please enter a username and password."));
@@ -71,11 +77,11 @@ class MoreAdminsBasicAuth extends BasicAuth {
             throw $e;
         }
 
-        if($permissionCode && !Permission::checkMember($member->ID, $permissionCode)) {
+        if ($permissionCode && !Permission::checkMember($member->ID, $permissionCode)) {
             $response = new SS_HTTPResponse(null, 401);
             $response->addHeader('WWW-Authenticate', "Basic realm=\"$realm\"");
 
-            if(isset($_SERVER['PHP_AUTH_USER'])) {
+            if (isset($_SERVER['PHP_AUTH_USER'])) {
                 $response->setBody(_t('BasicAuth.ERRORNOTADMIN', "That user is not an administrator."));
             }
 
